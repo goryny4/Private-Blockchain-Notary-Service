@@ -2,91 +2,79 @@
 
 Blockchain has the potential to change the way that the world approaches data. Develop Blockchain skills by understanding the data model behind Blockchain by developing your own simplified private blockchain.
 
-
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-
-
 ### Prerequisites
 
-Installing Node and NPM is pretty straightforward using the installer package available from the (Node.jsВ® web site)[https://nodejs.org/en/].
-
-
+Installing Node and NPM is pretty straightforward using the installer package available from the (Node.js web site)[https://nodejs.org/en/].
 
 ### Configuring your project
 
-- Use NPM to initialize your project and create package.json to store project dependencies.
+- Install dependencies
 ```
-npm init
+npm install 
 ```
-- Install crypto-js with --save flag to save dependency to our package.json file
-```
-npm install crypto-js --save
-```
-- Install level with --save flag
-```
-npm install level --save
-```
-
-- Install Express with --save flag
-```
-npm i express --save
-```
-
-- Install bodyParser with --save flag
-```
-npm i bodyParser --save
-```
-
-
-
-## Endpoints
-
-- Create a new block. Request body shouldn't be empty. Request should be a json with 'body' element.
-```
-POST http://localhost:8000/block
-```
-
-- Get block by it's height (id)
-```
-GET http://localhost:8000/block/:id
-```
-
+It includes nodemon, crypto-js, levelDB, express, bodyParser, bitcoinjs-lib, bitcoinjs-message etc 
 
 
 ## How to run and test the app
 
-0) If you already have records in your local LevelDB, clean it 
-```
-node index.js
-```
-
 1) run the server
 ```
-node app.js
+npm start
 ```
 
-2) Create a genesis block 
+## Endpoints
+
+#### STEP 1
+- Ask for a message to sign
+```
+POST http://localhost:8000/requestValidation 
+{
+    "address":"1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN"
+}
+```
+- Send a signed message
+```
+POST http://localhost:8000/requestValidation 
+{
+    "address":"1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN",
+    "signature":"G3lCknl7hMj4G/8KXYwwO5yy5fKU2Kcgbay3UKXx07JWJp/FZ4IIR3yzB1blsG7BVualhX959T3aGk2DeG25Y8M="
+}
+```
+#### STEP 2
+- Register a Star. Request body shouldn't be empty. Request should be a json with 'body' element.
+It should also contain dec, ra and story inside the star element
 ```
 POST http://localhost:8000/block
-```
-```
-{body:'Some test content'}
+{
+  "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ",
+  "star": {
+    "dec": "-26° 29'\'' 24.9",
+    "ra": "16h 29m 1.0s",
+    "story": "Found star using https://www.google.com/sky/"
+  }
+}
 ```
 
-3) Create few more blocks by repeating step 2) with different body content
 
-4) Check if the blocks are valid in DB by reaching
+#### STEP 3
+- Get block by it's hash
 ```
-http://localhost:8000/block/0
-http://localhost:8000/block/1
-http://localhost:8000/block/2
+GET http://localhost:8000/star/hash/:hash
 ```
-in your browser
 
+- Get blocks by wallet address
+```
+GET http://localhost:8000/star/address/:address
+```
+
+- Get block by it's height
+```
+GET http://localhost:8000/block/:height
+```
 
 
 ## Built With
