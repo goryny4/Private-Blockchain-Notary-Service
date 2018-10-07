@@ -36,6 +36,12 @@ POST http://localhost:8000/requestValidation
     "address":"1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN"
 }
 ```
+
+- run this command to generate a signature for testing purposes
+```
+node sign {a message, for ex. 1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN:1538893200:starRegistry} 
+```
+
 - Send a signed message
 ```
 POST http://localhost:8000/requestValidation 
