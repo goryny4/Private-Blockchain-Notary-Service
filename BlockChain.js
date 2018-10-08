@@ -37,7 +37,7 @@ class Blockchain {
 
     static _decodeStarStory(data) {
         if ((data.body.star !== undefined) && (data.body.star.story !== undefined)) {
-            data.body.star.storyDecoded = Buffer.from(data.body.star.story, 'hex').toString('utf8');
+            data.body.star.storyDecoded = Buffer.from(data.body.star.story, 'hex').toString('ascii');
         }
         return data;
     }
