@@ -46,27 +46,29 @@ app.get('/block/:id', (req, res) => {
     }
 });
 
-app.post('/block', (req, res) => {
+
+const { check, validationResult } = require('express-validator/check');
+const blockCheck = [
+    check('body').not().isEmpty().withMessage('Body is required!'),
+    check('body.address').not().isEmpty().withMessage('Address is required!'),
+    check('body.star').not().isEmpty().withMessage('Star is required!'),
+    check('body.star.ra').not().isEmpty().withMessage('ra is required!'),
+    check('body.star.dec').not().isEmpty().withMessage('dec is required!'),
+    check('body.star.story').not().isEmpty().withMessage('Story is required!'),
+];
+
+app.post('/block', blockCheck, (req, res) => {
     let body = req.body.body;
     console.log(body);
-    req.checkBody('body', 'Body is required').notEmpty();
-    req.checkBody('body.address', 'Address is required').notEmpty();
+
+    let errors = req.validationErrors();
+    if (errors) return res.status(400).json(errors);
 
     if (mempool[body.address] === undefined) {
         return res.status(400).json({"error":"Please request a message first (/requestValidation)"});
     }
     if (allowStarRegistration[body.address] === undefined) {
         return res.status(400).json({"error":"Please sign a message first (/message-signature/validate)"});
-    }
-
-    req.checkBody('body.star', 'Star is required').notEmpty();
-    req.checkBody('body.star.ra', 'ra is required').notEmpty();
-    req.checkBody('body.star.dec', 'dec is required').notEmpty();
-    req.checkBody('body.star.story', 'Story is required').notEmpty();
-
-    let errors = req.validationErrors();
-    if(errors){
-        return res.status(400).json(errors);
     }
 
     async function addBlock(body) {
